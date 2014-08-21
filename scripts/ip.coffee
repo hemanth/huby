@@ -1,14 +1,15 @@
 # Description:
-#   Return Hubot's external IP address (via ipconfig.me)
+#   Return Hubot's external IP address (via h3manth.com)
 # 
 # Commands:
 #   hubot ip - Returns Hubot server's external IP address 
 module.exports = (robot) ->
   robot.respond /ip/i, (msg) ->
-    msg.http("http://ipconfig.me/ip")
-      .get() (err, res, ip) ->
+    msg.http("http://h3manth.com/ip.php")
+      .get() (err, res, jsnp) ->
         switch res.statusCode
           when 200
-            msg.send "External IP address: #{ip}"
+						data = jsnp.substring jsnp.indexOf("(") + 1, jsnp.lastIndexOf(")")
+            msg.send "External IP address: #{data.ip}"
           else
             msg.send "There was an error getting external IP (status: #{res.statusCode})."
